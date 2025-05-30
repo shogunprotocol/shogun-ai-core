@@ -1,0 +1,39 @@
+# RPC Endpoints
+rpc:
+  ethereum: "https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY"
+  arbitrum: "https://arb-mainnet.g.alchemy.com/v2/YOUR_KEY"
+  optimism: "https://opt-mainnet.g.alchemy.com/v2/YOUR_KEY"
+
+# Protocol Addresses
+protocols:
+  aave:
+    lending_pool: "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9"
+    data_provider: "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d"
+  
+  pendle:
+    router: "0x0000000001E4ef00d069e71d6bA041b0A16F7eA0"
+    market_factory: "0x27b1dAcd74688aF24a64BD3C9C1B1231183318bd"
+  
+  lybra:
+    protocol: "0x97de57eC338AB5d51557DA3434828C5DbFaDA371"
+    staking: "0x4E5B2e1dc63F6b91cb6Cd759936495434C7e972F"
+
+# Risk Parameters
+risk:
+  min_confidence_score: 0.85
+  max_exposure_per_vault: 0.2  # 20% of portfolio
+  max_slippage: 0.005  # 0.5%
+  min_apr_threshold: 0.05  # 5%
+
+# LLM Settings
+llm:
+  model: "gpt-4"
+  temperature: 0.0  # Deterministic responses
+  max_tokens: 1000
+  context_window: 4000
+
+# Strategy Execution
+execution:
+  gas_multiplier: 1.2
+  max_retries: 3
+  confirmation_blocks: 2 
