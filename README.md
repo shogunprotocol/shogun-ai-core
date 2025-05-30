@@ -5,7 +5,7 @@ An AI-powered DeFi strategy agent that generates and executes vault strategies u
 ## Overview
 
 AI vault Agent is a deterministic AI system that:
-- Fetches real-time data from multiple DeFi protocols (Aave, Pendle, Lybra)
+- Fetches real-time data from multiple DeFi protocols (Aave, flare, blockscout)
 - Uses LLM-based planning to generate strategy recommendations
 - Assesses risk using a trained machine learning model
 - Executes approved strategies on-chain
