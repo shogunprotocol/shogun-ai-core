@@ -1,10 +1,10 @@
-# Shogun Agent
+# AI vaults Agent
 
 An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment.
 
 ## Overview
 
-Shogun Agent is a deterministic AI system that:
+AI vault Agent is a deterministic AI system that:
 - Fetches real-time data from multiple DeFi protocols (Aave, Pendle, Lybra)
 - Uses LLM-based planning to generate strategy recommendations
 - Assesses risk using a trained machine learning model
@@ -13,7 +13,7 @@ Shogun Agent is a deterministic AI system that:
 ## Project Structure
 
 ```
-📁 shogun-agent/
+📁 ai-agent/
 ├── 📂 src/                    # Source code
 │   ├── 📂 agent/             # Core agent logic
 │   ├── 📂 data_providers/    # Protocol data fetching
