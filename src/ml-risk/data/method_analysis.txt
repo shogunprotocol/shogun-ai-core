@@ -1,0 +1,58 @@
+📜 All Transaction Methods:
+     addLiquidityToV1
+     addLiquidityToV1
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+     addLiquidityToV2
+        convertByPath
+removeLiquidityFromV2
+        convertByPath
+        convertByPath
+        convertByPath
+     addLiquidityToV2
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+removeLiquidityFromV1
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+removeLiquidityFromV2
+removeLiquidityFromV1
+        convertByPath
+        convertByPath
+        convertByPath
+removeLiquidityFromV2
+removeLiquidityFromV1
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+        convertByPath
+
+📊 Method Counts:
+convertByPath: 40
+removeLiquidityFromV2: 3
+removeLiquidityFromV1: 3
+addLiquidityToV1: 2
+addLiquidityToV2: 2
