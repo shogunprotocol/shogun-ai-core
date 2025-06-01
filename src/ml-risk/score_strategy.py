@@ -13,7 +13,7 @@ def score_strategy(strategy_json):
 # Mocked extractor (replace with real feature mapping)
 def extract_features_from_strategy(strategy):
     return [
-        strategy['allocations']['pendle'],
+        strategy['allocations']['rootstock'],
         strategy['expected_yield'],
         strategy['risk_level'] == 'low'
     ]
