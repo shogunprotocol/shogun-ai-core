@@ -136,7 +136,3 @@ class FlowStrategyProvider:
         # TODO: Implement proper ABI loading
         return []
 
-    def _get_strategy_abi(self) -> list:
-        """Get the ABI for the strategy contract."""
-        # TODO: Implement proper ABI loading
-        return [] 

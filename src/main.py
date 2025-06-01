@@ -1,5 +1,5 @@
 """
-Main orchestration module for the Shogun Agent.
+Main orchestration module for the SPQR Agent.
 Coordinates data fetching, strategy planning, risk assessment, and execution.
 """
 
@@ -24,9 +24,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-class ShogunAgent:
+class SPQRAgent:
     def __init__(self, config_path: str = "configs/config.yaml"):
-        """Initialize the Shogun Agent with configuration and components."""
+        """Initialize the SPQR Agent with configuration and components."""
         self.config = self._load_config(config_path)
         self.llm_planner = LLMPlanner(self.config['llm'])
         self.risk_model = RiskModel()
@@ -131,8 +131,8 @@ class ShogunAgent:
             raise
 
 def main():
-    """Entry point for the Shogun Agent."""
-    agent = ShogunAgent()
+    """Entry point for the SPQR Agent."""
+    agent = SPQRAgent()
     agent.run()
 
 if __name__ == "__main__":
