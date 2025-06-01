@@ -2,6 +2,38 @@
 
 An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment. SPQR specializes in cross-protocol yield optimization across Rootstock and Flow ecosystems.
 
+## System Overview
+
+```mermaid
+graph TB
+    subgraph SPQR["SPQR Agent"]
+        LLM[LLM Planner]
+        Risk[Risk Model]
+        KB[Knowledge Box]
+        Exec[Strategy Executor]
+        
+        subgraph Providers["Data Providers"]
+            RS[Rootstock Provider]
+            FS[Flow Strategy Provider]
+            KP[KittyPunch Provider]
+            BS[Blockscout Provider]
+        end
+        
+        LLM --> Risk
+        Risk --> Exec
+        KB --> LLM
+        Providers --> KB
+    end
+    
+    subgraph Markets["DeFi Markets"]
+        RS --> |Monitor| Rootstock
+        FS --> |Monitor| Flow
+        KP --> |Monitor| KittyPunch
+    end
+```
+
+For a detailed view of the system architecture, including strategy flows, risk assessment, and monitoring parameters, see our [SPQR Architecture Documentation](docs/SPQR_ARCHITECTURE.md).
+
 ## Overview
 
 SPQR is a deterministic AI system that:
@@ -69,6 +101,8 @@ SPQR employs a multi-layered risk assessment system:
    - Multi-sig verification
    - Rate limiting
 
+For detailed risk assessment flows and monitoring parameters, refer to the [Risk Assessment section](docs/SPQR_ARCHITECTURE.md#risk-assessment) in our architecture documentation.
+
 ## Setup
 
 1. Install dependencies:
@@ -103,6 +137,8 @@ python src/main.py
 - **Real-time Monitoring**: Continuous protocol health checks
 - **Emergency Shutdown**: Automatic response to unusual events
 
+For detailed security measures and implementation, see the [Security Measures section](docs/SPQR_ARCHITECTURE.md#security-measures) in our architecture documentation.
+
 ## Protocol Integrations
 
 ### Rootstock
@@ -115,6 +151,8 @@ python src/main.py
 - KittyPunch lending
 - Flow Strategy vaults
 
+For detailed protocol integration flows and monitoring strategies, see the [Strategy Flow section](docs/SPQR_ARCHITECTURE.md#strategy-flow) in our architecture documentation.
+
 ## Monitoring
 
 SPQR monitors:
@@ -124,6 +162,8 @@ SPQR monitors:
 - Protocol health metrics
 - Smart contract events
 - Market conditions
+
+For a comprehensive view of our monitoring system and real-time parameters, check the [Monitoring Parameters section](docs/SPQR_ARCHITECTURE.md#monitoring-parameters) in our architecture documentation.
 
 ## License
 
