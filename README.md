@@ -1,28 +1,73 @@
-# AI vaults Agent
+# SPQR Agent
 
-An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment.
+An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment. SPQR specializes in cross-protocol yield optimization across Rootstock and Flow ecosystems.
 
 ## Overview
 
-AI vault Agent is a deterministic AI system that:
-- Fetches real-time data from multiple DeFi protocols (Aave, flare, blockscout)
-- Uses LLM-based planning to generate strategy recommendations
-- Assesses risk using a trained machine learning model
-- Executes approved strategies on-chain
+SPQR is a deterministic AI system that:
+- Monitors and executes strategies across Rootstock and Flow ecosystems
+- Implements cross-protocol yield optimization
+- Uses LLM-based planning for strategy generation
+- Employs multi-layered risk assessment
+- Executes approved strategies with multi-sig security
+
+## Core Strategies
+
+### Rootstock Strategy
+- BTC lending on Sovryn
+- DLLR/BTC pool liquidity provision
+- Leverage optimization
+- Liquidation risk monitoring
+
+### Flow Strategy
+- MORE Markets borrowing
+- KittyPunch lending integration
+- Token reward optimization
+- Protocol health monitoring
 
 ## Project Structure
 
 ```
-📁 ai-agent/
+📁 spqr/
 ├── 📂 src/                    # Source code
 │   ├── 📂 agent/             # Core agent logic
-│   ├── 📂 data_providers/    # Protocol data fetching
+│   │   ├── llm_planner.py    # Strategy generation
+│   │   ├── risk_model.py     # Risk assessment
+│   │   └── knowledge_box.py  # Historical data
+│   ├── 📂 data_providers/    # Protocol integrations
+│   │   ├── rootstock.py      # Rootstock protocol
+│   │   ├── flow_strategy.py  # Flow Strategy
+│   │   ├── kitty_punch.py    # KittyPunch
+│   │   └── blockscout.py     # Event monitoring
 │   ├── 📂 execution/         # On-chain execution
 │   └── main.py               # Main orchestration
-├── 📂 data/                  # Historical data
-├── configs/                  # Configuration files
+├── 📂 docs/                  # Documentation
+│   └── SPQR_ARCHITECTURE.md  # System architecture
+├── 📂 configs/               # Configuration files
 └── requirements.txt          # Dependencies
 ```
+
+## Risk Assessment
+
+SPQR employs a multi-layered risk assessment system:
+
+1. **Protocol Risk**
+   - TVL monitoring
+   - Liquidity depth analysis
+   - Smart contract risk scoring
+   - Historical pattern matching
+
+2. **Market Risk**
+   - Volatility tracking
+   - Price impact analysis
+   - Slippage protection
+   - Liquidation risk assessment
+
+3. **Execution Risk**
+   - Gas optimization
+   - Transaction sequencing
+   - Multi-sig verification
+   - Rate limiting
 
 ## Setup
 
@@ -33,26 +78,52 @@ pip install -r requirements.txt
 
 2. Configure environment:
 - Copy `.env.example` to `.env`
-- Add your API keys and RPC endpoints
+- Add your API keys and RPC endpoints:
+  - Rootstock RPC
+  - Flow RPC
+  - OpenRouter API key
 
-3. Run the agent:
+3. Configure protocols:
+Edit `configs/config.yaml` to set:
+- Protocol addresses
+- Risk thresholds
+- Monitoring parameters
+- LLM settings
+
+4. Run the agent:
 ```bash
 python src/main.py
 ```
 
-## Configuration
+## Security Features
 
-Edit `configs/config.yaml` to configure:
-- RPC endpoints
-- Vault addresses
-- Risk thresholds
-- Strategy parameters
+- **Deterministic Execution**: No randomness in strategy generation
+- **Multi-sig Protection**: All transactions require multiple signatures
+- **Risk Scoring**: Every strategy is scored before execution
+- **Real-time Monitoring**: Continuous protocol health checks
+- **Emergency Shutdown**: Automatic response to unusual events
 
-## Security
+## Protocol Integrations
 
-- The agent uses deterministic logic with no randomness
-- All strategies are risk-scored before execution
-- Historical pattern matching helps prevent known risky scenarios
+### Rootstock
+- Sovryn lending pools
+- DLLR/BTC liquidity pools
+- Blockscout event monitoring
+
+### Flow
+- MORE Markets protocol
+- KittyPunch lending
+- Flow Strategy vaults
+
+## Monitoring
+
+SPQR monitors:
+- Liquidity events
+- Volume spikes
+- Rate changes
+- Protocol health metrics
+- Smart contract events
+- Market conditions
 
 ## License
 
