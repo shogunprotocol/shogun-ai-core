@@ -1,21 +1,21 @@
-# RPC Endpoints
+# RPC Endpoints for Avalanche
 rpc:
-  rootstock: "https://public-node.rsk.co"
-  flow: "https://flow-mainnet.g.alchemy.com/v2/YOUR_KEY"
+  avalanche_mainnet: "https://api.avax.network/ext/bc/C/rpc"
+  avalanche_fuji: "https://api.avax-test.network/ext/bc/C/rpc"
 
-# Protocol Addresses
+# Protocol Addresses for Avalanche DeFi
 protocols:
-  rootstock:
-    lending_pool: "0x2bEE6167f91d10Db23252e03dE039dA6B9047D49"
-    pool_address: "0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d"
+  aave_v3:
+    lending_pool: "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+    pool_address: "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
   
-  flow_strategy:
-    vault_address: "0x..."  # Add Flow Strategy vault address
-    rpc_url: "https://flow-mainnet.g.alchemy.com/v2/YOUR_KEY"
+  benqi:
+    lending_pool: "0x5C0401e81Bc07Ca70fAD469b451682c0d747Ef1c"
+    pool_address: "0x5C0401e81Bc07Ca70fAD469b451682c0d747Ef1c"
     
-  kitty_punch:
-    lending_pool: "0x..."  # Add KittyPunch lending pool address
-    rpc_url: "https://flow-mainnet.g.alchemy.com/v2/YOUR_KEY"
+  trader_joe:
+    router: "0x60aE616a2155Ee3d9A6854BaF16D6C5bE5b3b8E8"
+    factory: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
 
 # Risk Parameters
 risk:
@@ -40,21 +40,19 @@ execution:
 # Providers
 providers:
   defillama:
-    protocol_slug: "rootstock"
-  
-  blockscout:
-    api_url: "https://rootstock.blockscout.com/api/v2"
+    protocol_slug: "avalanche"
+    api_url: "https://api.llama.fi"
 
 # Monitoring
 monitoring:
   targets:
-    - address: "0x2bEE6167f91d10Db23252e03dE039dA6B9047D49"  # Rootstock pool
+    - address: "0x794a61358D6845594F94dc1DB02A252b5b4814aD"  # Aave V3 pool
       time_window: 3600  # 1 hour
       threshold: 2.0
-    - address: "0xF92cC3B19C585EA71aDcC65138f151BD4d69363C"  # Flow Strategy vault
+    - address: "0x5C0401e81Bc07Ca70fAD469b451682c0d747Ef1c"  # Benqi pool
       time_window: 3600
       threshold: 2.0
-    - address: "0x..."  # KittyPunch lending pool
+    - address: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"  # Trader Joe factory
       time_window: 3600
       threshold: 2.0
     
