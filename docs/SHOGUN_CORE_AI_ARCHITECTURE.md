@@ -1,10 +1,10 @@
-# SPQR Agent Architecture
+# shogun core ai Architecture
 
 ## System Overview
 
 ```mermaid
 graph TB
-    subgraph SPQR["SPQR Agent"]
+    subgraph ShogunCoreAI["shogun core ai"]
         LLM[LLM Planner]
         Risk[Risk Model]
         KB[Knowledge Box]
@@ -45,34 +45,34 @@ graph LR
         KP --> |Earn| KPTOKENS[KittyPunch Tokens]
     end
     
-    SPQR[SPQR Agent] --> |Execute| Rootstock
-    SPQR --> |Execute| Flow
+    ShogunCoreAI[shogun core ai] --> |Execute| Rootstock
+    ShogunCoreAI --> |Execute| Flow
 ```
 
 ## Data Flow
 
 ```mermaid
 sequenceDiagram
-    participant SPQR as SPQR Agent
+    participant ShogunCoreAI as shogun core ai
     participant RS as Rootstock Provider
     participant FS as Flow Strategy Provider
     participant KP as KittyPunch Provider
     participant BS as Blockscout Provider
     
     loop Every Block
-        SPQR->>RS: Fetch Rootstock Data
-        SPQR->>FS: Fetch Flow Strategy Data
-        SPQR->>KP: Fetch KittyPunch Data
-        SPQR->>BS: Monitor Events
+        ShogunCoreAI->>RS: Fetch Rootstock Data
+        ShogunCoreAI->>FS: Fetch Flow Strategy Data
+        ShogunCoreAI->>KP: Fetch KittyPunch Data
+        ShogunCoreAI->>BS: Monitor Events
         
-        BS-->>SPQR: Unusual Events
-        RS-->>SPQR: Pool Data
-        FS-->>SPQR: Vault Data
-        KP-->>SPQR: Lending Data
+        BS-->>ShogunCoreAI: Unusual Events
+        RS-->>ShogunCoreAI: Pool Data
+        FS-->>ShogunCoreAI: Vault Data
+        KP-->>ShogunCoreAI: Lending Data
         
-        SPQR->>SPQR: Generate Strategy
-        SPQR->>SPQR: Assess Risk
-        SPQR->>SPQR: Execute if Safe
+        ShogunCoreAI->>ShogunCoreAI: Generate Strategy
+        ShogunCoreAI->>ShogunCoreAI: Assess Risk
+        ShogunCoreAI->>ShogunCoreAI: Execute if Safe
     end
 ```
 
@@ -130,7 +130,7 @@ graph LR
 
 ## Configuration
 
-The SPQR agent is configured through `configs/config.yaml` with the following key components:
+The shogun core ai is configured through `configs/config.yaml` with the following key components:
 
 - RPC endpoints for Rootstock and Flow
 - Protocol addresses for all integrations

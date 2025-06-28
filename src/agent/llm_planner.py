@@ -28,8 +28,8 @@ class LLMPlanner:
         self.base_url = "https://openrouter.ai/api/v1"
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
-            "HTTP-Referer": os.getenv('SITE_URL', 'https://github.com/your-repo/SPQR-agent'),
-            "X-Title": os.getenv('SITE_NAME', 'SPQR Agent')
+            "HTTP-Referer": os.getenv('SITE_URL', 'https://github.com/your-repo/shogun-core-ai'),
+            "X-Title": os.getenv('SITE_NAME', 'shogun core ai')
         }
 
     def _format_prompt(self, market_data: Dict[str, Any], historical_context: Dict[str, Any]) -> str:
