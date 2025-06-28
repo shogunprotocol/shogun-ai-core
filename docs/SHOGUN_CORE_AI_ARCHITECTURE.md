@@ -11,10 +11,7 @@ graph TB
         Exec[Strategy Executor]
         
         subgraph Providers["Data Providers"]
-            RS[Rootstock Provider]
-            FS[Flow Strategy Provider]
-            KP[KittyPunch Provider]
-            BS[Blockscout Provider]
+            DL[DefiLlama Provider]
         end
         
         LLM --> Risk
@@ -23,10 +20,10 @@ graph TB
         Providers --> KB
     end
     
-    subgraph Markets["DeFi Markets"]
-        RS --> |Monitor| Rootstock
-        FS --> |Monitor| Flow
-        KP --> |Monitor| KittyPunch
+    subgraph Markets["Avalanche DeFi Markets"]
+        DL --> |Monitor| AAVE[Aave V3]
+        DL --> |Monitor| BENQI[Benqi]
+        DL --> |Monitor| TJ[Trader Joe]
     end
 ```
 
@@ -34,19 +31,25 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph Rootstock["Rootstock Strategy"]
-        BTC[BTC] --> |Lend| SOV[Sovryn]
-        SOV --> |Deposit| DLLR[DLLR/BTC Pool]
+    subgraph AaveV3["Aave V3 Strategy"]
+        USDC[USDC] --> |Supply| AAVE_POOL[Aave Pool]
+        AAVE_POOL --> |Borrow| WETH[WETH]
+        WETH --> |Swap| USDC
     end
     
-    subgraph Flow["Flow Strategy"]
-        FLOW[FLOW] --> |Borrow| MORE[MORE Markets]
-        MORE --> |Lend| KP[KittyPunch]
-        KP --> |Earn| KPTOKENS[KittyPunch Tokens]
+    subgraph Benqi["Benqi Strategy"]
+        AVAX[AVAX] --> |Supply| BENQI_POOL[Benqi Pool]
+        BENQI_POOL --> |Earn| QI[QI Tokens]
     end
     
-    ShogunCoreAI[shogun core ai] --> |Execute| Rootstock
-    ShogunCoreAI --> |Execute| Flow
+    subgraph TraderJoe["Trader Joe Strategy"]
+        USDC --> |Add Liquidity| TJ_POOL[Trader Joe Pool]
+        TJ_POOL --> |Earn| JOE[JOE Tokens]
+    end
+    
+    ShogunCoreAI[shogun core ai] --> |Execute| AaveV3
+    ShogunCoreAI --> |Execute| Benqi
+    ShogunCoreAI --> |Execute| TraderJoe
 ```
 
 ## Data Flow
@@ -54,21 +57,14 @@ graph LR
 ```mermaid
 sequenceDiagram
     participant ShogunCoreAI as shogun core ai
-    participant RS as Rootstock Provider
-    participant FS as Flow Strategy Provider
-    participant KP as KittyPunch Provider
-    participant BS as Blockscout Provider
+    participant DL as DefiLlama Provider
     
     loop Every Block
-        ShogunCoreAI->>RS: Fetch Rootstock Data
-        ShogunCoreAI->>FS: Fetch Flow Strategy Data
-        ShogunCoreAI->>KP: Fetch KittyPunch Data
-        ShogunCoreAI->>BS: Monitor Events
+        ShogunCoreAI->>DL: Fetch Avalanche DeFi Data
+        ShogunCoreAI->>DL: Monitor Protocol Events
         
-        BS-->>ShogunCoreAI: Unusual Events
-        RS-->>ShogunCoreAI: Pool Data
-        FS-->>ShogunCoreAI: Vault Data
-        KP-->>ShogunCoreAI: Lending Data
+        DL-->>ShogunCoreAI: Market Data
+        DL-->>ShogunCoreAI: Unusual Events
         
         ShogunCoreAI->>ShogunCoreAI: Generate Strategy
         ShogunCoreAI->>ShogunCoreAI: Assess Risk
@@ -99,17 +95,23 @@ graph TD
 
 ## Strategy Components
 
-### Rootstock Strategy
-- Monitor BTC lending rates on Sovryn
-- Track DLLR/BTC pool liquidity
-- Calculate optimal leverage ratios
+### Aave V3 Strategy
+- Monitor lending and borrowing rates on Aave V3
+- Track liquidity utilization across pools
+- Calculate optimal supply/borrow ratios
 - Monitor liquidation risks
 
-### Flow Strategy
-- Monitor MORE Markets borrowing rates
-- Track KittyPunch lending pools
-- Calculate token rewards
-- Monitor protocol health
+### Benqi Strategy
+- Monitor Benqi lending protocol rates
+- Track QI token rewards and emissions
+- Calculate optimal lending positions
+- Monitor protocol health metrics
+
+### Trader Joe Strategy
+- Monitor Trader Joe DEX liquidity pools
+- Track JOE token rewards and farming
+- Calculate optimal liquidity provision
+- Monitor impermanent loss risks
 
 ## Monitoring Parameters
 
@@ -132,8 +134,8 @@ graph LR
 
 The shogun core ai is configured through `configs/config.yaml` with the following key components:
 
-- RPC endpoints for Rootstock and Flow
-- Protocol addresses for all integrations
+- RPC endpoints for Avalanche mainnet and Fuji testnet
+- Protocol addresses for Aave V3, Benqi, and Trader Joe
 - Risk parameters and thresholds
 - Monitoring configurations
 - LLM settings for strategy generation

@@ -1,6 +1,6 @@
 """
 Main orchestration module for the shogun core ai.
-Coordinates data fetching, strategy planning, risk assessment, and execution.
+Coordinates data fetching, strategy planning, risk assessment, and execution for Avalanche DeFi protocols.
 """
 
 import yaml
@@ -12,10 +12,7 @@ from agent.llm_planner import LLMPlanner
 from agent.risk_model import RiskModel
 from agent.knowledge_box import KnowledgeBox
 from execution.strategy_executor import StrategyExecutor
-from data_providers.rootstock import RootstockProvider
-from data_providers.blockscout import BlockscoutProvider
-from data_providers.flow_strategy import FlowStrategyProvider
-from data_providers.kitty_punch import KittyPunchProvider
+from data_providers.defillama_provider import DefiLlamaProvider
 
 # Configure logging
 logging.basicConfig(
@@ -33,15 +30,12 @@ class ShogunCoreAI:
         self.knowledge_box = KnowledgeBox()
         self.strategy_executor = StrategyExecutor(self.config['execution'])
         
-        # Initialize data providers
+        # Initialize data providers for Avalanche
         self.data_providers = {
-            'rootstock': RootstockProvider(self.config['protocols']['rootstock']),
-            'blockscout': BlockscoutProvider(self.config['providers']['blockscout']),
-            'flow_strategy': FlowStrategyProvider(self.config['protocols']['flow_strategy']),
-            'kitty_punch': KittyPunchProvider(self.config['protocols']['kitty_punch'])
+            'defillama': DefiLlamaProvider(self.config['providers']['defillama']),
         }
         
-        # Initialize monitoring targets
+        # Initialize monitoring targets for Avalanche protocols
         self.monitoring_targets = self.config.get('monitoring', {}).get('targets', [])
 
     def _load_config(self, config_path: str) -> Dict[str, Any]:
@@ -50,7 +44,7 @@ class ShogunCoreAI:
             return yaml.safe_load(f)
 
     def fetch_market_data(self) -> Dict[str, Any]:
-        """Fetch current market data from all providers."""
+        """Fetch current market data from Avalanche DeFi protocols."""
         market_data = {}
         for provider_name, provider in self.data_providers.items():
             try:
@@ -61,7 +55,7 @@ class ShogunCoreAI:
 
     def monitor_protocol_activity(self) -> List[Dict[str, Any]]:
         """
-        Monitor protocol activity for unusual events and changes.
+        Monitor Avalanche protocol activity for unusual events and changes.
         
         Returns:
             List of detected unusual events
@@ -70,14 +64,14 @@ class ShogunCoreAI:
         
         for target in self.monitoring_targets:
             try:
-                # Monitor liquidity events
-                liquidity_events = self.data_providers['blockscout'].monitor_liquidity_events(
+                # Monitor liquidity events on Avalanche
+                liquidity_events = self.data_providers['defillama'].monitor_liquidity_events(
                     target['address'],
                     time_window=target.get('time_window', 3600)
                 )
                 
                 # Detect unusual activity
-                unusual_activity = self.data_providers['blockscout'].detect_unusual_activity(
+                unusual_activity = self.data_providers['defillama'].detect_unusual_activity(
                     target['address'],
                     threshold=target.get('threshold', 2.0)
                 )
@@ -97,7 +91,7 @@ class ShogunCoreAI:
     def run(self):
         """Main execution loop for the agent."""
         try:
-            # 1. Fetch current market data
+            # 1. Fetch current market data from Avalanche
             market_data = self.fetch_market_data()
             
             # 2. Monitor protocol activity
