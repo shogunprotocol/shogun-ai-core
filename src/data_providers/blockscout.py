@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class BlockscoutProvider:
     def __init__(self, config: Dict[str, Any]):
         """Initialize the Blockscout data provider with configuration."""
-        self.api_url = config.get('api_url', 'https://rootstock.blockscout.com/api/v2')
+        self.api_url = config.get('api_url', 'https://api.snowtrace.io/api')
         self.web3 = Web3()
         
     def fetch_transaction_data(self, address: str) -> List[Dict[str, Any]]:

@@ -13,7 +13,11 @@ def score_strategy(strategy_json):
 # Mocked extractor (replace with real feature mapping)
 def extract_features_from_strategy(strategy):
     return [
-        strategy['allocations']['aave_v3'],
+        strategy['allocations']['strategy_1'],
+        strategy['allocations']['strategy_2'],
+        strategy['allocations']['strategy_3'],
         strategy['expected_yield'],
-        strategy['risk_level'] == 'low'
+        strategy['risk_level'] == 'low',
+        strategy['oracle_health_score'],
+        strategy['vault_tvl_ratio']
     ]

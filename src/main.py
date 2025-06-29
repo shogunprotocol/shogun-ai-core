@@ -5,6 +5,7 @@ Coordinates data fetching, strategy planning, risk assessment, and execution for
 
 import yaml
 import logging
+import asyncio
 from pathlib import Path
 from typing import Dict, Any, List
 
@@ -13,6 +14,8 @@ from agent.risk_model import RiskModel
 from agent.knowledge_box import KnowledgeBox
 from execution.strategy_executor import StrategyExecutor
 from data_providers.defillama_provider import DefiLlamaProvider
+from serverless.compute_engine import ChainlinkComputeEngine
+from serverless.verification import VerificationEngine
 
 # Configure logging
 logging.basicConfig(
@@ -29,6 +32,10 @@ class ShogunCoreAI:
         self.risk_model = RiskModel()
         self.knowledge_box = KnowledgeBox()
         self.strategy_executor = StrategyExecutor(self.config['execution'])
+        
+        # Initialize Chainlink Functions components
+        self.chainlink_engine = ChainlinkComputeEngine(self.config.get('chainlink_functions', {}))
+        self.verification_engine = VerificationEngine(self.config.get('chainlink_functions', {}))
         
         # Initialize data providers for Avalanche
         self.data_providers = {
@@ -88,7 +95,169 @@ class ShogunCoreAI:
                 
         return unusual_events
 
-    def run(self):
+    async def assess_strategy_risk_chainlink(self, strategy_data: Dict[str, Any]) -> float:
+        """
+        Assess strategy risk using Chainlink Functions.
+        
+        Args:
+            strategy_data: The strategy data to assess
+            
+        Returns:
+            float: Risk score from Chainlink Functions
+        """
+        try:
+            # Submit strategy risk scoring task to Chainlink Functions
+            task_id = await self.chainlink_engine.submit_strategy_risk_scoring_task(
+                strategy_data,
+                callback=self._on_strategy_risk_complete
+            )
+            
+            logger.info(f"Submitted Chainlink Functions strategy risk scoring task: {task_id}")
+            
+            # Wait for completion (in production, this would be async)
+            # For now, we'll use a simple polling approach
+            while True:
+                status = self.chainlink_engine.get_task_status(task_id)
+                if status['status'] == 'completed':
+                    result_data = status['result']
+                    if result_data:
+                        import json
+                        result = json.loads(result_data)
+                        risk_score = result.get('risk_score', 0.5)
+                        logger.info(f"Chainlink Functions risk score: {risk_score}")
+                        return risk_score
+                elif status['status'] == 'failed':
+                    logger.warning("Chainlink Functions risk scoring failed, falling back to local model")
+                    return self.risk_model.score_strategy(strategy_data)
+                
+                await asyncio.sleep(1)  # Poll every second
+                
+        except Exception as e:
+            logger.error(f"Error in Chainlink Functions risk assessment: {e}")
+            # Fallback to local risk model
+            return self.risk_model.score_strategy(strategy_data)
+
+    async def _on_strategy_risk_complete(self, response):
+        """Callback when Chainlink Functions strategy risk scoring completes."""
+        try:
+            # Parse the Chainlink Functions response
+            result_data = response.result.decode() if response.result else None
+            if result_data:
+                import json
+                result = json.loads(result_data)
+                risk_score = result.get('risk_score')
+                verification_hash = result.get('verification_hash')
+                
+                if risk_score and verification_hash:
+                    # Bridge the verified risk score onchain
+                    strategy_address = result.get('strategy_address')
+                    tx_hash = self.verification_engine.bridge_risk_score_onchain(
+                        risk_score, verification_hash, {'strategy_address': strategy_address}
+                    )
+                    logger.info(f"Strategy risk score bridged onchain: {tx_hash}")
+                
+        except Exception as e:
+            logger.error(f"Error in strategy risk completion callback: {e}")
+
+    async def optimize_vault_allocation_chainlink(self, vault_data: Dict[str, Any]) -> Dict[str, float]:
+        """
+        Optimize vault allocation using Chainlink Functions.
+        
+        Args:
+            vault_data: Vault data including current allocations, constraints, etc.
+            
+        Returns:
+            Dict: Optimal allocation proposal
+        """
+        try:
+            # Submit allocation optimization task to Chainlink Functions
+            task_id = await self.chainlink_engine.submit_allocation_optimization_task(
+                vault_data,
+                callback=self._on_allocation_complete
+            )
+            
+            logger.info(f"Submitted Chainlink Functions allocation optimization task: {task_id}")
+            
+            # Wait for completion
+            while True:
+                status = self.chainlink_engine.get_task_status(task_id)
+                if status['status'] == 'completed':
+                    result_data = status['result']
+                    if result_data:
+                        import json
+                        result = json.loads(result_data)
+                        allocation = result.get('optimal_allocations', {})
+                        logger.info(f"Chainlink Functions allocation optimization complete")
+                        return allocation
+                elif status['status'] == 'failed':
+                    logger.warning("Chainlink Functions allocation optimization failed")
+                    return {}
+                
+                await asyncio.sleep(1)
+                
+        except Exception as e:
+            logger.error(f"Error in Chainlink Functions allocation optimization: {e}")
+            return {}
+
+    async def _on_allocation_complete(self, response):
+        """Callback when Chainlink Functions allocation optimization completes."""
+        try:
+            result_data = response.result.decode() if response.result else None
+            if result_data:
+                import json
+                result = json.loads(result_data)
+                allocation = result.get('optimal_allocations', {})
+                verification_hash = result.get('verification_hash')
+                
+                if allocation and verification_hash:
+                    # Bridge allocation proposal onchain
+                    tx_hash = self.verification_engine.bridge_allocation_proposal_onchain(
+                        allocation, verification_hash, 'vault_001'
+                    )
+                    logger.info(f"Allocation proposal bridged onchain: {tx_hash}")
+                
+        except Exception as e:
+            logger.error(f"Error in allocation completion callback: {e}")
+
+    async def check_oracle_health_chainlink(self, oracle_addresses: List[str]) -> Dict[str, Any]:
+        """
+        Check oracle health using Chainlink Functions.
+        
+        Args:
+            oracle_addresses: List of oracle addresses to check
+            
+        Returns:
+            Dict: Oracle health status
+        """
+        try:
+            # Submit oracle health check task to Chainlink Functions
+            task_id = await self.chainlink_engine.submit_oracle_health_check_task(
+                oracle_addresses
+            )
+            
+            logger.info(f"Submitted Chainlink Functions oracle health check task: {task_id}")
+            
+            # Wait for completion
+            while True:
+                status = self.chainlink_engine.get_task_status(task_id)
+                if status['status'] == 'completed':
+                    result_data = status['result']
+                    if result_data:
+                        import json
+                        result = json.loads(result_data)
+                        logger.info(f"Chainlink Functions oracle health check complete")
+                        return result
+                elif status['status'] == 'failed':
+                    logger.warning("Chainlink Functions oracle health check failed")
+                    return {}
+                
+                await asyncio.sleep(1)
+                
+        except Exception as e:
+            logger.error(f"Error in Chainlink Functions oracle health check: {e}")
+            return {}
+
+    async def run(self):
         """Main execution loop for the agent."""
         try:
             # 1. Fetch current market data from Avalanche
@@ -110,8 +279,8 @@ class ShogunCoreAI:
                 historical_context=historical_context
             )
             
-            # 5. Assess risk
-            risk_score = self.risk_model.score_strategy(strategy)
+            # 5. Assess risk using Chainlink Functions
+            risk_score = await self.assess_strategy_risk_chainlink(strategy)
             
             # 6. Execute if risk score is acceptable
             if risk_score >= self.config['risk']['min_confidence_score']:
@@ -124,10 +293,25 @@ class ShogunCoreAI:
             logger.error(f"Error in agent execution: {e}")
             raise
 
+    async def shutdown(self):
+        """Shutdown the agent gracefully."""
+        logger.info("Shutting down Shogun Core AI...")
+        await self.chainlink_engine.shutdown()
+        logger.info("Shutdown complete")
+
 def main():
     """Entry point for the shogun core ai."""
     agent = ShogunCoreAI()
-    agent.run()
+    
+    try:
+        # Run the agent
+        asyncio.run(agent.run())
+    except KeyboardInterrupt:
+        logger.info("Received shutdown signal")
+        asyncio.run(agent.shutdown())
+    except Exception as e:
+        logger.error(f"Fatal error: {e}")
+        asyncio.run(agent.shutdown())
 
 if __name__ == "__main__":
     main() 

@@ -17,6 +17,50 @@ protocols:
     router: "0x60aE616a2155Ee3d9A6854BaF16D6C5bE5b3b8E8"
     factory: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
 
+# Multi-Token Vault Configuration
+vault:
+  multi_token_vault: "0x1234567890123456789012345678901234567890"  # MultiTokenVault.sol address
+  governance: "0x2345678901234567890123456789012345678901"  # Governance contract
+  
+  # Supported Tokens
+  tokens:
+    usdc:
+      address: "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E"  # USDC on Avalanche
+      decimals: 6
+      oracle: "0xF096872672F44d6EBA71458D74fe67F9a77a23B9"  # USDC/USD Chainlink on Avalanche
+    wbtc:
+      address: "0x50b7545627a5162F82A992c33b87aDc75187B218"  # WBTC on Avalanche
+      decimals: 8
+      oracle: "0x2779D32d5166BAaa2B2b658333bA7e6Ec0C65743"  # BTC/USD Chainlink on Avalanche
+    weth:
+      address: "0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB"  # WETH on Avalanche
+      decimals: 18
+      oracle: "0x976B3D034E162d8bD72D6b9C989d545b839003d0"  # ETH/USD Chainlink on Avalanche
+    link:
+      address: "0x5947BB275c521040051D82396192181b413227A3"  # LINK on Avalanche
+      decimals: 18
+      oracle: "0x49ccd9ca821EfEab2b98c60dC60F518E765EDe9a"  # LINK/USD Chainlink on Avalanche
+
+# Whitelisted Strategy Contracts
+strategies:
+  strategy_1:
+    address: "0x3456789012345678901234567890123456789012"
+    name: "Yield Farming Strategy"
+    max_allocation: 0.4  # 40% of vault
+    risk_score: 0.3
+    
+  strategy_2:
+    address: "0x4567890123456789012345678901234567890123"
+    name: "Lending Strategy"
+    max_allocation: 0.3  # 30% of vault
+    risk_score: 0.2
+    
+  strategy_3:
+    address: "0x5678901234567890123456789012345678901234"
+    name: "Liquidity Provision Strategy"
+    max_allocation: 0.3  # 30% of vault
+    risk_score: 0.4
+
 # Risk Parameters
 risk:
   min_confidence_score: 0.85
@@ -55,4 +99,76 @@ monitoring:
     - address: "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"  # Trader Joe factory
       time_window: 3600
       threshold: 2.0
+
+# Chainlink Functions Configuration
+chainlink_functions:
+  # Network configuration
+  network: "avalanche"
+  
+  # Chainlink Functions subscription
+  subscription_id: "${CHAINLINK_SUBSCRIPTION_ID}"  # Set via environment variable
+  
+  # API credentials
+  defillama_api_key: "${DEFILLAMA_API_KEY}"  # For cross-chain APY fetching
+  
+  # Oracle health monitoring
+  oracle_deviation_threshold: 0.02  # 2% deviation threshold
+  
+  # Compute engine settings
+  max_concurrent_tasks: 5
+  verification_timeout: 300
+  max_retries: 3
+  
+  # Onchain bridging configuration
+  rpc_url: "https://api.avax.network/ext/bc/C/rpc"
+  private_key: "${PRIVATE_KEY}"  # Set via environment variable
+  
+  # Smart contract addresses for bridging results
+  contracts:
+    risk_scoring: "0x1234567890123456789012345678901234567890"  # Placeholder
+    allocation: "0x2345678901234567890123456789012345678901"    # Placeholder
+    market_data: "0x3456789012345678901234567890123456789012"   # Placeholder
+  
+  # Contract ABIs (simplified for config - load from files in production)
+  abis:
+    risk_scoring: []
+    allocation: []
+    market_data: []
+
+# Serverless Platform Configuration
+serverless:
+  # Functions platform settings
+  functions:
+    api_url: "https://functions.chain.link"
+    api_key: "${FUNCTIONS_API_KEY}"  # Set via environment variable
+    subscription_id: "${FUNCTIONS_SUBSCRIPTION_ID}"
+    network: "avalanche"
+    
+    # Function IDs for different computation types
+    function_ids:
+      risk_scoring: "${RISK_SCORING_FUNCTION_ID}"
+      cross_chain_apy: "${CROSS_CHAIN_APY_FUNCTION_ID}"
+      allocation_optimization: "${ALLOCATION_OPT_FUNCTION_ID}"
+      market_analysis: "${MARKET_ANALYSIS_FUNCTION_ID}"
+  
+  # Compute engine settings
+  max_concurrent_tasks: 5
+  verification_timeout: 300
+  max_retries: 3
+  
+  # Onchain bridging configuration
+  rpc_url: "https://api.avax.network/ext/bc/C/rpc"
+  private_key: "${PRIVATE_KEY}"  # Set via environment variable
+  
+  # Smart contract addresses for bridging results
+  contracts:
+    risk_scoring: "0x1234567890123456789012345678901234567890"  # Placeholder
+    allocation: "0x2345678901234567890123456789012345678901"    # Placeholder
+    market_data: "0x3456789012345678901234567890123456789012"   # Placeholder
+  
+  # Contract ABIs (simplified for config - load from files in production)
+  abis:
+    risk_scoring: []
+    allocation: []
+    market_data: []
     
