@@ -12,6 +12,7 @@ graph TB
         
         subgraph Providers["Data Providers"]
             DL[DefiLlama Provider]
+            BS[Blockscout Provider]
         end
         
         LLM --> Risk
@@ -20,36 +21,50 @@ graph TB
         Providers --> KB
     end
     
-    subgraph Markets["Avalanche DeFi Markets"]
-        DL --> |Monitor| AAVE[Aave V3]
-        DL --> |Monitor| BENQI[Benqi]
-        DL --> |Monitor| TJ[Trader Joe]
+    subgraph Vault["Multi-Token Vault System"]
+        MTV[MultiTokenVault.sol]
+        ORACLE[Chainlink Oracle]
+        STRATEGIES[Whitelisted Strategies]
+        
+        MTV --> ORACLE
+        MTV --> STRATEGIES
     end
+    
+    Exec --> |Execute| MTV
 ```
 
 ## Strategy Flow
 
 ```mermaid
 graph LR
-    subgraph AaveV3["Aave V3 Strategy"]
-        USDC[USDC] --> |Supply| AAVE_POOL[Aave Pool]
-        AAVE_POOL --> |Borrow| WETH[WETH]
-        WETH --> |Swap| USDC
+    subgraph Vault["Multi-Token Vault"]
+        USDC[USDC] --> |Deposit| MTV[MultiTokenVault]
+        WBTC[WBTC] --> |Deposit| MTV
+        WETH[WETH] --> |Deposit| MTV
+        LINK[LINK] --> |Deposit| MTV
+        
+        MTV --> |Convert| USDC_EQ[USDC Equivalent]
     end
     
-    subgraph Benqi["Benqi Strategy"]
-        AVAX[AVAX] --> |Supply| BENQI_POOL[Benqi Pool]
-        BENQI_POOL --> |Earn| QI[QI Tokens]
+    subgraph Strategies["Whitelisted Strategies"]
+        STRAT1[Strategy Contract 1]
+        STRAT2[Strategy Contract 2]
+        STRAT3[Strategy Contract 3]
+        
+        USDC_EQ --> |Allocate| STRAT1
+        USDC_EQ --> |Allocate| STRAT2
+        USDC_EQ --> |Allocate| STRAT3
     end
     
-    subgraph TraderJoe["Trader Joe Strategy"]
-        USDC --> |Add Liquidity| TJ_POOL[Trader Joe Pool]
-        TJ_POOL --> |Earn| JOE[JOE Tokens]
+    subgraph AI["AI Agent"]
+        LLM[LLM Planner]
+        Risk[Risk Model]
+        
+        LLM --> |Generate| Strategy
+        Risk --> |Validate| Strategy
     end
     
-    ShogunCoreAI[shogun core ai] --> |Execute| AaveV3
-    ShogunCoreAI --> |Execute| Benqi
-    ShogunCoreAI --> |Execute| TraderJoe
+    AI --> |Execute| Strategies
 ```
 
 ## Data Flow
@@ -58,17 +73,22 @@ graph LR
 sequenceDiagram
     participant ShogunCoreAI as shogun core ai
     participant DL as DefiLlama Provider
+    participant Vault as MultiTokenVault
+    participant Oracle as Chainlink Oracle
     
     loop Every Block
-        ShogunCoreAI->>DL: Fetch Avalanche DeFi Data
-        ShogunCoreAI->>DL: Monitor Protocol Events
+        ShogunCoreAI->>DL: Fetch DeFi Market Data
+        ShogunCoreAI->>Vault: Monitor Vault Status
         
         DL-->>ShogunCoreAI: Market Data
-        DL-->>ShogunCoreAI: Unusual Events
+        Vault-->>ShogunCoreAI: Vault Metrics
+        
+        ShogunCoreAI->>Oracle: Get Token Prices
+        Oracle-->>ShogunCoreAI: Price Feeds
         
         ShogunCoreAI->>ShogunCoreAI: Generate Strategy
         ShogunCoreAI->>ShogunCoreAI: Assess Risk
-        ShogunCoreAI->>ShogunCoreAI: Execute if Safe
+        ShogunCoreAI->>Vault: Execute if Safe
     end
 ```
 
@@ -81,11 +101,13 @@ graph TD
         LIQ[Liquidity Check]
         VOL[Volatility Check]
         EXP[Exposure Check]
+        ORACLE[Oracle Health]
         
         TVL --> Score[Risk Score]
         LIQ --> Score
         VOL --> Score
         EXP --> Score
+        ORACLE --> Score
         
         Score --> Decision{Execute?}
         Decision -->|Safe| Execute
@@ -93,37 +115,43 @@ graph TD
     end
 ```
 
-## Strategy Components
+## Core Components
 
-### Aave V3 Strategy
-- Monitor lending and borrowing rates on Aave V3
-- Track liquidity utilization across pools
-- Calculate optimal supply/borrow ratios
-- Monitor liquidation risks
+### Multi-Token Vault (MultiTokenVault.sol)
+- Accepts multiple ERC20 tokens (USDC, WBTC, WETH, LINK)
+- Chainlink oracle integration for reliable price feeds
+- Automatic token conversion to USDC equivalent
+- Advanced multi-asset management with precise pricing
 
-### Benqi Strategy
-- Monitor Benqi lending protocol rates
-- Track QI token rewards and emissions
-- Calculate optimal lending positions
-- Monitor protocol health metrics
+### Strategy System
+- Whitelisted strategy contracts
+- AI agent execution through secure interfaces
+- Harvest and emergency exit capabilities
+- Transparent fund management
 
-### Trader Joe Strategy
-- Monitor Trader Joe DEX liquidity pools
-- Track JOE token rewards and farming
-- Calculate optimal liquidity provision
-- Monitor impermanent loss risks
+### Token Management
+- **USDC**: Primary stablecoin for calculations and pricing
+- **WBTC**: Bitcoin exposure with real-time oracle pricing
+- **WETH**: Ethereum exposure with reliable price feeds
+- **LINK**: Chainlink token integration for oracle operations
 
 ## Monitoring Parameters
 
 ```mermaid
 graph LR
     subgraph Monitoring["Real-time Monitoring"]
+        VAULT[Vault Performance]
+        STRATEGY[Strategy Status]
+        ORACLE[Oracle Health]
         LIQ[Liquidity Events]
         VOL[Volume Spikes]
         RATE[Rate Changes]
         HEALTH[Protocol Health]
         
-        LIQ --> Alert[Alert System]
+        VAULT --> Alert[Alert System]
+        STRATEGY --> Alert
+        ORACLE --> Alert
+        LIQ --> Alert
         VOL --> Alert
         RATE --> Alert
         HEALTH --> Alert
@@ -134,8 +162,10 @@ graph LR
 
 The shogun core ai is configured through `configs/config.yaml` with the following key components:
 
-- RPC endpoints for Avalanche mainnet and Fuji testnet
-- Protocol addresses for Aave V3, Benqi, and Trader Joe
+- RPC endpoints for Ethereum mainnet
+- MultiTokenVault contract address
+- Whitelisted strategy contract addresses
+- Chainlink oracle addresses
 - Risk parameters and thresholds
 - Monitoring configurations
 - LLM settings for strategy generation
@@ -145,12 +175,16 @@ The shogun core ai is configured through `configs/config.yaml` with the followin
 ```mermaid
 graph TD
     subgraph Security["Security Measures"]
+        WHITELIST[Whitelisted Strategies]
+        ORACLE[Oracle Integration]
         RATE[Rate Limiting]
         SLIP[Slippage Protection]
         GAS[Gas Optimization]
         MULTI[Multi-sig Execution]
         
-        RATE --> Safe[Safe Execution]
+        WHITELIST --> Safe[Safe Execution]
+        ORACLE --> Safe
+        RATE --> Safe
         SLIP --> Safe
         GAS --> Safe
         MULTI --> Safe

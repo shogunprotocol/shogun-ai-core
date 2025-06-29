@@ -1,0 +1,21 @@
+{
+  "name": "shogun-chainlink-functions",
+  "version": "1.0.0",
+  "description": "Chainlink Functions for Shogun AI Core",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@chainlink/functions-toolkit": "^0.0.1"
+  },
+  "keywords": [
+    "chainlink",
+    "functions",
+    "defi",
+    "shogun",
+    "ai"
+  ],
+  "author": "Shogun AI Core Team",
+  "license": "MIT"
+} 
