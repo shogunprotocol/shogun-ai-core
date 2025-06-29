@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  shogun-chainlink-functions:
+    build: .
+    container_name: shogun-chainlink-functions
+    volumes:
+      # Mount the functions directory for development
+      - ./src/serverless/functions:/app/functions
+      # Mount configs for easy updates
+      - ./configs:/app/configs
+    environment:
+      - NODE_ENV=development
+      - CHAINLINK_SUBSCRIPTION_ID=${CHAINLINK_SUBSCRIPTION_ID:-}
+      - DEFILLAMA_API_KEY=${DEFILLAMA_API_KEY:-}
+    ports:
+      # Expose port for potential web interface
+      - "3000:3000"
+    # Keep container running for interactive use
+    stdin_open: true
+    tty: true
+    # Alternative: run test and exit
+    # command: ["/app/test_functions.sh"] 

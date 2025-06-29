@@ -1,12 +1,37 @@
-# shogun core ai
+# Shogun AI Core
 
-An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment. shogun core ai specializes in cross-protocol yield optimization through a secure Multi-Token Vault system with **Chainlink Functions** integration for verifiable offchain computation.
+An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment. Shogun AI Core specializes in cross-protocol yield optimization through a secure Multi-Token Vault system with **Chainlink Functions** integration for verifiable offchain computation.
+
+## 🚀 Quick Start
+
+### Option 1: Docker (Recommended)
+```bash
+# Build and test Chainlink Functions locally
+./run_docker.sh build
+./run_docker.sh test
+
+# Deploy to blockchain (requires subscription ID)
+./deploy_to_blockchain.sh sepolia YOUR_SUBSCRIPTION_ID
+```
+
+### Option 2: Local Development
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your API keys
+
+# Run the agent
+python src/main.py
+```
 
 ## System Overview
 
 ```mermaid
 graph TB
-    subgraph ShogunCoreAI["shogun core ai"]
+    subgraph ShogunCoreAI["Shogun AI Core"]
         LLM[LLM Planner]
         Risk[Risk Model]
         KB[Knowledge Box]
@@ -45,11 +70,11 @@ graph TB
     VE --> |Bridge Results| MTV
 ```
 
-For a detailed view of the system architecture, including strategy flows, risk assessment, and monitoring parameters, see our [shogun core ai Architecture Documentation](docs/SHOGUN_CORE_AI_ARCHITECTURE.md).
+For a detailed view of the system architecture, including strategy flows, risk assessment, and monitoring parameters, see our [Shogun AI Core Architecture Documentation](docs/SHOGUN_CORE_AI_ARCHITECTURE.md).
 
 ## Overview
 
-shogun core ai is a deterministic AI system that:
+Shogun AI Core is a deterministic AI system that:
 - Manages strategies through a secure Multi-Token Vault
 - Implements cross-protocol yield optimization
 - Uses LLM-based planning for strategy generation
@@ -80,7 +105,7 @@ shogun core ai is a deterministic AI system that:
 ## Project Structure
 
 ```
-📁 shogun-core-ai/
+📁 shogun-ai-core/
 ├── 📂 src/                    # Source code
 │   ├── 📂 agent/             # Core agent logic
 │   │   ├── llm_planner.py    # Strategy generation
@@ -100,12 +125,84 @@ shogun core ai is a deterministic AI system that:
 │   ├── SHOGUN_CORE_AI_ARCHITECTURE.md  # System architecture
 │   └── SERVERLESS_INTEGRATION.md       # Chainlink Functions guide
 ├── 📂 configs/               # Configuration files
+├── 📂 contracts/             # Smart contracts
+├── 📂 deployment_functions/  # Functions ready for deployment
+├── Dockerfile                # Docker configuration
+├── docker-compose.yml        # Docker orchestration
+├── run_docker.sh            # Docker management script
+├── deploy_to_blockchain.sh  # Blockchain deployment script
 └── requirements.txt          # Dependencies
 ```
 
+## 🐳 Docker Setup
+
+### Prerequisites
+- Docker Desktop installed and running
+- Chainlink Functions subscription (get one at [functions.chain.link](https://functions.chain.link))
+
+### Quick Commands
+```bash
+# Build the Docker image
+./run_docker.sh build
+
+# Test functions locally
+./run_docker.sh test
+
+# Open shell in container
+./run_docker.sh shell
+
+# Deploy to blockchain (requires subscription ID)
+./deploy_to_blockchain.sh sepolia YOUR_SUBSCRIPTION_ID
+
+# Clean up
+./run_docker.sh clean
+```
+
+### What Each Command Does
+- `build`: Creates Docker image with Node.js and all dependencies
+- `test`: Runs your Chainlink Functions locally to verify they work
+- `shell`: Opens interactive shell in the container for development
+- `deploy`: Prepares functions for blockchain deployment
+- `clean`: Removes containers and images
+
+## 🔗 Chainlink Functions Deployment
+
+### Step 1: Get Your Subscription
+1. Go to [functions.chain.link](https://functions.chain.link)
+2. Sign up/login to your account
+3. Create a subscription and add LINK tokens (1-2 LINK minimum)
+4. Copy your subscription ID
+
+### Step 2: Deploy Your Functions
+```bash
+# Deploy to testnet (FREE)
+./deploy_to_blockchain.sh sepolia YOUR_SUBSCRIPTION_ID
+
+# Deploy to mainnet (COSTS MONEY)
+./deploy_to_blockchain.sh avalanche YOUR_SUBSCRIPTION_ID
+```
+
+### Step 3: Manual Deployment via Web Dashboard
+The script will prepare your functions in the `deployment_functions/` folder. Then:
+
+1. Go to [functions.chain.link](https://functions.chain.link)
+2. Click "Create Function"
+3. Select your network and subscription
+4. Copy-paste the function code from `deployment_functions/`
+5. Click "Deploy"
+6. Note down the Function ID
+
+### Step 4: Update Configuration
+Update `chainlink_functions_deployed.yaml` with your function IDs.
+
+### Step 5: Test and Integrate
+- Test functions in the Chainlink dashboard
+- Integrate function IDs into your smart contracts
+- Monitor LINK consumption
+
 ## Risk Assessment
 
-shogun core ai employs a multi-layered risk assessment system:
+Shogun AI Core employs a multi-layered risk assessment system:
 
 1. **Protocol Risk**
    - TVL monitoring
@@ -135,6 +232,19 @@ For detailed risk assessment flows and monitoring parameters, refer to the [Risk
 
 ## Setup
 
+### Option 1: Docker (Recommended)
+```bash
+# 1. Build and test
+./run_docker.sh build
+./run_docker.sh test
+
+# 2. Deploy to blockchain
+./deploy_to_blockchain.sh sepolia YOUR_SUBSCRIPTION_ID
+
+# 3. Follow deployment instructions
+```
+
+### Option 2: Local Development
 1. Install dependencies:
 ```bash
 pip install -r requirements.txt
@@ -239,7 +349,7 @@ For detailed vault management flows and monitoring strategies, see the [Strategy
 
 ## Monitoring
 
-shogun core ai monitors:
+Shogun AI Core monitors:
 - Vault performance metrics
 - Strategy execution status
 - Oracle price feeds
@@ -254,6 +364,41 @@ shogun core ai monitors:
 - **Cross-chain data integrity**
 
 For a comprehensive view of our monitoring system and real-time parameters, check the [Monitoring Parameters section](docs/SHOGUN_CORE_AI_ARCHITECTURE.md#monitoring-parameters) in our architecture documentation.
+
+## 💰 Costs
+
+### Testnet Deployment
+- **FREE** (limited usage)
+- Perfect for development and testing
+
+### Mainnet Deployment
+- **Deployment**: ~0.1-0.5 LINK per function
+- **Execution**: ~0.01-0.05 LINK per call
+- **Monthly**: ~1-10 LINK depending on usage
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Docker not running**
+```bash
+# Start Docker Desktop first
+open -a Docker
+```
+
+**Function deployment fails**
+- Check your subscription has sufficient LINK
+- Verify JavaScript syntax
+- Check network connectivity
+
+**CLI not found**
+- Chainlink Functions uses web dashboard, not CLI
+- Use the deployment script to prepare files
+
+### Getting Help
+- 📖 [Full Deployment Guide](src/serverless/functions/DEPLOYMENT.md)
+- 📖 [Integration Documentation](docs/SERVERLESS_INTEGRATION.md)
+- 🔗 [Chainlink Functions Docs](https://docs.chain.link/chainlink-functions)
 
 ## License
 

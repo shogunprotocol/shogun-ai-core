@@ -1,0 +1,32 @@
+# Chainlink Functions Configuration - DEPLOYED
+# Network: avalanche
+# Subscription ID: 39
+# Deployed at: Mon Jun 30 05:32:10 WITA 2025
+
+chainlink_functions:
+  network: "avalanche"
+  subscription_id: "39"
+  
+  # Function IDs (replace with actual IDs from deployment)
+  function_ids:
+    strategy_risk_scoring: "YOUR_STRATEGY_RISK_FUNCTION_ID"
+    cross_chain_apy: "YOUR_CROSS_CHAIN_APY_FUNCTION_ID"
+    allocation_optimization: "YOUR_ALLOCATION_OPT_FUNCTION_ID"
+    oracle_health_check: "YOUR_ORACLE_HEALTH_FUNCTION_ID"
+  
+  # RPC URLs for different networks
+  rpc_urls:
+    avalanche: "https://api.avax.network/ext/bc/C/rpc"
+    ethereum: "https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY"
+    polygon: "https://polygon-rpc.com"
+    bsc: "https://bsc-dataseed.binance.org"
+    sepolia: "https://sepolia.infura.io/v3/YOUR_KEY"
+    mumbai: "https://polygon-mumbai.infura.io/v3/YOUR_KEY"
+  
+  # Gas settings
+  gas_limit: 300000
+  gas_price: "auto"
+  
+  # Verification settings
+  verification_timeout: 300
+  max_retries: 3

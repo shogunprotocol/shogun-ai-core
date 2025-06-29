@@ -106,7 +106,7 @@ chainlink_functions:
   network: "avalanche"
   
   # Chainlink Functions subscription
-  subscription_id: "${CHAINLINK_SUBSCRIPTION_ID}"  # Set via environment variable
+  subscription_id: 39
   
   # API credentials
   defillama_api_key: "${DEFILLAMA_API_KEY}"  # For cross-chain APY fetching
@@ -134,6 +134,13 @@ chainlink_functions:
     risk_scoring: []
     allocation: []
     market_data: []
+  
+  # Function IDs for different computation types
+  function_ids:
+    strategy_risk_scoring: "YOUR_STRATEGY_RISK_FUNCTION_ID"
+    cross_chain_apy: "YOUR_CROSS_CHAIN_APY_FUNCTION_ID"
+    allocation_optimization: "YOUR_ALLOCATION_OPT_FUNCTION_ID"
+    oracle_health_check: "YOUR_ORACLE_HEALTH_FUNCTION_ID"
 
 # Serverless Platform Configuration
 serverless:
