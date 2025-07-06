@@ -1,31 +1,99 @@
 # Shogun AI Core
 
-An AI-powered DeFi strategy agent that generates and executes vault strategies using LLM-based planning and risk assessment. Shogun AI Core specializes in cross-protocol yield optimization through a secure Multi-Token Vault system with **Chainlink Functions** integration for verifiable offchain computation.
+An AI-powered DeFi strategy agent for Flow and Filecoin, specializing in cross-protocol yield optimization, onchain transparency, and consumer-friendly experiences. Shogun AI Core leverages LLM-based planning, risk assessment, and multi-chain vaults to deliver next-generation DeFi strategies.
 
-## 🚀 Quick Start
+---
 
-### Option 1: Docker (Recommended)
-```bash
-# Build and test Chainlink Functions locally
-./run_docker.sh build
-./run_docker.sh test
+## 🌊 Flow & Filecoin Integration
 
-# Deploy to blockchain (requires subscription ID)
-./deploy_to_blockchain.sh sepolia YOUR_SUBSCRIPTION_ID
+Shogun AI Core is designed for mass adoption and consumer-oriented DeFi on Flow and Filecoin. It supports:
+- **Flow Testnet**: Next-gen EVM++ features, walletless UX, and composable agent strategies.
+- **Filecoin Calibration Testnet**: Transparent, onchain-logged strategies and vaults.
+
+### Why Flow?
+Flow is built for killer apps that reach millions. Shogun AI Core integrates with Flow to:
+- Enable powerful randomness (native Solidity VRF)
+- Support generative and composable DeFi strategies
+- Use EVM++ for sponsored/batched transactions and walletless experiences
+- Manage accounts and automate recovery with Account Linking
+- Deploy Solidity or Cadence contracts for advanced agent logic
+
+---
+
+## 🔥 Supported Protocols & Strategies
+
+Shogun AI Core can whitelist and execute strategies on select Flow protocols, such as:
+- **KittyPunch**
+- **MORE Markets** (Lending)
+- **Ankr** (Liquid Staking)
+
+> Strategies are executed via whitelisted contracts, with all actions and risk data logged onchain for transparency.
+
+---
+
+## 🛡️ Onchain Transparency: Movement Logger
+
+Every rebalance or strategy execution logs the following data onchain for full transparency:
+- Reason for movement
+- Risk level and assessment
+- Vault, chain, block, and strategy details
+- Amount and timestamp
+
+**Movement Logger SQL Schema:**
+```sql
+id integer primary key,
+cid text,
+vault text,
+src_chain integer,
+block_no integer,
+strategy text,
+reason text,
+updated_at text,
+amount text,
+risk_level text
 ```
 
-### Option 2: Local Development
-```bash
-# Install dependencies
-pip install -r requirements.txt
+---
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your API keys
+## 📜 Deployed Contracts & Network Details
 
-# Run the agent
-python src/main.py
-```
+### Filecoin Calibration Testnet
+| Contract           | Address                                    | Explorer |
+|--------------------|--------------------------------------------|----------|
+| AI Vault           | 0xAF28B48E48317109F885FEc05751f5422d850857 | Beryx    |
+| Strategy           | 0xF3B66dEF94Ab0C8D485e36845f068aFB48959A04 | Beryx    |
+| Mock Protocol      | 0x8fDE7A649c782c96e7f4D9D88490a7C5031F51a9 | Beryx    |
+| USDFC Token        | 0xb3042734b608a1B16e9e86B374A3f3e389B4cDf0 | Beryx    |
+| Movement Logger    | 0x9f03F83F092D025635AeA1800E6AB3c9f0882673 | Beryx    |
+| Decision Registry  | 0xDcc2986e610B51ECA891Bd2470F7CcD02F9C4e1B | Beryx    |
+
+- **Chain ID:** 314159 (0x4cb2f)
+- **RPC:** https://rpc.ankr.com/filecoin_testnet
+- **Currency:** tFIL
+
+### Flow Testnet
+| Contract      | Address                                    | Explorer |
+|--------------|---------------------------------------------|----------|
+| AI Vault     | 0x7C65F77a4EbEa3D56368A73A12234bB4384ACB28  | Flowscan  |
+| Mock USDC    | 0xAF28B48E48317109F885FEc05751f5422d850857  | Flowscan  |
+
+- **Chain ID:** 545 (0x221)
+- **RPC:** https://testnet.evm.nodes.onflow.org
+- **Currency:** FLOW
+
+---
+
+## 🧩 Flow Integration Rules (for Bounties & Killer Apps)
+- Your app must be deployed on or connected to Flow
+- Must use Solidity or Cadence contracts
+- Should leverage Flow's unique features (EVM++, VRF, Account Linking, etc.)
+- Must be public, free to check, and not a simple fork
+- README must include:
+  - One-sentence project description
+  - What you integrated with Flow and how
+  - Team description and socials
+
+---
 
 ## System Overview
 
